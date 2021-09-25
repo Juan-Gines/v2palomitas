@@ -1,0 +1,17 @@
+producto=MS006;
+Valor energético  (kJ)100=1434;
+Valor energético  (kJ)32=459;
+Valor energético  (Kcal)100=339;
+Valor energético  (Kcal)32=108;
+Grasas (g)100=4,6;
+Grasas (g)32=1,5;
+Saturadas  (g)100:=0,6;
+Saturadas  (g)32:=0,2;
+Hidratos de carbono:100=65,3;
+Hidratos de carbono:32=20,9;
+Azúcares (g):100=0,6;
+Azúcares (g):32=0,2;
+Proteinas (g)100:=9,1;
+Proteinas (g)32:=2,9;
+Sal (g):100 =2,8;
+Sal (g):32 =0,9;
