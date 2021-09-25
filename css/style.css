@@ -1,0 +1,72 @@
+/* PARA HACER COLUMNAS */
+.flex-column {
+	display: flex;
+	flex-wrap:wrap;
+	justify-content:center;
+	flex-direction: column;
+	align-items: center;	
+}
+.flex-row {
+    display: flex;
+	flex-wrap:wrap;
+	justify-content:center;
+	flex-direction:row;	
+}
+/*INICIO DE LA HOJA DE ESTILOS */
+html{
+	min-height: 100%;
+	position: relative;
+	font-family: Arial, Helvetica, sans-serif;
+}
+body {
+	margin: 0;
+	margin-bottom: 80px !important;	
+}
+label {			
+	font-size: 1rem ;
+}
+#lang,
+.etiqueta{
+    display: inline-block;
+    margin: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+/*MAIN*/
+input {	
+	padding: 3px;
+	border-radius: 4px;
+	border: gray 1px solid;	
+	box-shadow: 1px 1px 2px gray;	
+}
+input[type="radio"]{
+    margin: 5px 5px 10px 20px;
+    box-shadow: none;
+}
+.centro{
+	align-self: auto;
+}
+button{
+	margin: 20px auto;		
+	background-color: green;
+	border-radius: 5px;
+	font: 1em sans-serif ;
+	font-weight: bold;
+	color: white;
+	border: 2px gray solid;	
+	padding: 2px 15px;
+	box-shadow: 1px 1px 2px gray;
+}
+button:hover{
+	background-color: #A412B8;
+	color: white;
+	cursor: pointer;
+}
+/*pie*/
+footer{    
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;    
+	padding: 10px 0px;  
+}

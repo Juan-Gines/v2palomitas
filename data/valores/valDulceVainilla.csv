@@ -1,0 +1,17 @@
+producto=MD003;
+Valor energético  (kJ)100=1474;
+Valor energético  (kJ)32=472;
+Valor energético  (Kcal)100=348;
+Valor energético  (Kcal)32=111;
+Grasas (g)100=4,7;
+Grasas (g)32=1,5;
+Saturadas  (g)100:=0,7;
+Saturadas  (g)32:=0,2;
+Hidratos de carbono:100=67,0;
+Hidratos de carbono:32=21,4;
+Azúcares (g):100=0,8;
+Azúcares (g):32=0,3;
+Proteinas (g)100:=9,4;
+Proteinas (g)32:=3,0;
+Sal (g):100 =0,1;
+Sal (g):32 =0,0;
