@@ -3,12 +3,10 @@ require_once "panel/vistas/login.php";
 require_once "modelo/servicios/servicios.php";
 require_once "libreria/ValidarInputs.php";
 class PaLogin{
-  private $consulta;
-  private $user;
+  private $consulta;  
 
   function __construct() {
-    $this->consulta=new Servicios();
-    $this->user="";
+    $this->consulta=new Servicios();    
   }
   function login(){
     if($_SERVER["REQUEST_METHOD"]=="POST"){
@@ -18,6 +16,8 @@ class PaLogin{
       if($respuesta["login"]){
         $_SESSION["login"]=true;
         $_SESSION["errLogin"]=false;
+        header("Location:{$_SERVER["PHP_SELF"]}");
+        exit;
       }else{
         $_SESSION["errLogin"]="*Usuario invalido";
       }

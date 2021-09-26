@@ -12,7 +12,7 @@ class Login{
         <input type="text" name="user" id="user" value="<?=(isset($_SESSION["user"]))? $_SESSION["user"]: "" ?>">
         <label for="pass" class="etiqueta">Password:</label>
         <input type="password" name="pass" id="pass">
-        <button name="login">Login</button>
+        <button name="login" class="btn align-content-lg-between btn-primary m-3">Login</button>
       </form>
       <output class="text-danger "><?=(isset($_SESSION["errLogin"]))? $_SESSION["errLogin"]: "" ?></output>
     </main>
