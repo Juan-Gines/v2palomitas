@@ -10,13 +10,13 @@ class Cabecera{
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>TAM - ingredientes</title>
-        <link rel="stylesheet" href="../css/bootstrap.min.css">
-        <link rel="stylesheet" href="../css/bootstrap.min.css.map">
-        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css.map">
+        <link rel="stylesheet" href="css/style.css">
       </head>
       <body>
         <header class="text-center mb-5">
-          <img src="../img/tam.png" alt="Logo TAM">
+          <img src="imagenes/tam.png" alt="Logo TAM">
         </header>     
     <?php    
   }

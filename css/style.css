@@ -9,7 +9,7 @@
 .flex-row {
     display: flex;
 	flex-wrap:wrap;
-	justify-content:center;
+	justify-content:space-evenly;
 	flex-direction:row;	
 }
 /*INICIO DE LA HOJA DE ESTILOS */
@@ -25,12 +25,22 @@ body {
 label {			
 	font-size: 1rem ;
 }
+.text-der{
+	text-align: right;
+}
+.min-form{
+	min-width: 350px;
+}
 #lang,
 .etiqueta{
     display: inline-block;
     margin: 10px;
     font-size: 1.2rem;
     font-weight: 600;
+}
+.icono{
+	width: 20px;
+	height: 20px;
 }
 /*MAIN*/
 input {	
@@ -46,22 +56,7 @@ input[type="radio"]{
 .centro{
 	align-self: auto;
 }
-button{
-	margin: 20px auto;		
-	background-color: green;
-	border-radius: 5px;
-	font: 1em sans-serif ;
-	font-weight: bold;
-	color: white;
-	border: 2px gray solid;	
-	padding: 2px 15px;
-	box-shadow: 1px 1px 2px gray;
-}
-button:hover{
-	background-color: #A412B8;
-	color: white;
-	cursor: pointer;
-}
+
 /*pie*/
 footer{    
     text-align: center;
