@@ -16,6 +16,8 @@ switch($_SERVER["REQUEST_METHOD"]){
       $resultado=Gestion::getSaboresId();
     }elseif(isset($_GET["listasabores"])){
       $resultado=Gestion::getListaSabores();
+    }elseif(isset($_GET["login"])){
+      $resultado=Gestion::getLogin();
     }
 }
 if(!empty($resultado)){

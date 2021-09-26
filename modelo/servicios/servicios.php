@@ -11,7 +11,7 @@ class Servicios{
   private $idiomas;
   private $saboresId;
   private $valores;
-  private $listaSabores;
+  private $listaSabores;  
   private $url="http://localhost/cursophp/palomitas/v2palomitas/api/palomitas.php";
 
   function getIdiomas(){        
@@ -54,5 +54,11 @@ class Servicios{
     $result=json_decode($resultado,true);
     $this->valores=new Valores($result);
     return $this->valores;
+  }
+
+  function getUser(){
+    $resultado=file_get_contents($this->url."?login&user=".$_SESSION["user"]."&pass=".$_SESSION["pass"]);
+    $result=json_decode($resultado,true);    
+    return $result;
   }
 }
