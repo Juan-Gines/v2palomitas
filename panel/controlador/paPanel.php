@@ -11,8 +11,7 @@ class PaPanel{
 
   function panel(){
     $_SESSION["id"]="es";
-    $idiomas=$this->consulta->getIdiomas();
-    $saboresLista=$this->consulta->getListaSabores();
+    $idiomas=$this->consulta->getIdiomas();    
     $saboresId=$this->consulta->getSaborId();
     if($_SERVER["REQUEST_METHOD"]=="POST"){
       

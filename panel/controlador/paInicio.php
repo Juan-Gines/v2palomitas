@@ -1,6 +1,8 @@
 <?php
 require_once "panel/controlador/paLogin.php";
 require_once "panel/controlador/paPanel.php";
+require_once "panel/controlador/editar.php";
+require_once "panel/controlador/nuevo.php";
 if(!isset($_SESSION["login"])){
   $_SESSION["login"]=false;
   $_SESSION["paIdioma"]=false;
@@ -12,3 +14,5 @@ if(!isset($_SESSION["login"])){
 }
 $panel=new PaPanel();
 $log=new PaLogin();
+$edit=new Editar();
+$new=new Nuevo();

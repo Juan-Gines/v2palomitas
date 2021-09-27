@@ -22,8 +22,8 @@ class Panel{
                 <tr>
                   <td class="fw-bold"><?=$idiomas->listado()[$i]?></td>
                   <td class="text-der">                    
-                    <a href="<?=htmlspecialchars($_SERVER["PHP_SELF"]."?id=".$i."&edito")?>"><img class='icono' src='iconos/editar.png' title='editar' alt='editar'></a>
-                    <a href="<?=htmlspecialchars($_SERVER["PHP_SELF"]."?action=1&id=".$i)?>"><img class='icono' src='iconos/borrar.png' title='borrar' alt='borrar'></a>
+                    <a href="<?=htmlspecialchars($_SERVER["PHP_SELF"]."?id=".$i."&action=1")?>"><img class='icono' src='iconos/editar.png' title='editar' alt='editar'></a>
+                    <a href="<?=htmlspecialchars($_SERVER["PHP_SELF"]."?action=2&id=".$i)?>"><img class='icono' src='iconos/borrar.png' title='borrar' alt='borrar'></a>
                   </td>                  
                 </tr>
             <?php    
@@ -31,7 +31,7 @@ class Panel{
             ?>            
           </tbody>
         </table>
-        <a href="<?=htmlspecialchars($_SERVER["PHP_SELF"]."?nuevoId")?>"><button class="btn align-content-lg-between btn-primary m-3" type="button">Nuevo idioma</button></a>
+        <a href="<?=htmlspecialchars($_SERVER["PHP_SELF"]."?action=3")?>"><button class="btn align-content-lg-between btn-primary m-3" type="button">Nuevo idioma</button></a>
       </div>
       <div class="table-responsive-sm mb-3 min-form">        
         <table class="table table-striped align-middle ">                                        
@@ -48,8 +48,8 @@ class Panel{
                 <tr>
                   <td class="fw-bold"><?=$saboresId->listado()[$i]?></td>
                   <td class="text-der">                    
-                    <a href="<?=htmlspecialchars($_SERVER["PHP_SELF"]."?id=".$i."&edito")?>"><img class='icono' src='iconos/editar.png' title='editar' alt='editar'></a>
-                    <a href="<?=htmlspecialchars($_SERVER["PHP_SELF"]."?action=2&id=".$i)?>"><img class='icono' src='iconos/borrar.png' title='borrar' alt='borrar'></a>
+                    <a href="<?=htmlspecialchars($_SERVER["PHP_SELF"]."?id=".$i."&action=4")?>"><img class='icono' src='iconos/editar.png' title='editar' alt='editar'></a>
+                    <a href="<?=htmlspecialchars($_SERVER["PHP_SELF"]."?action=5&id=".$i)?>"><img class='icono' src='iconos/borrar.png' title='borrar' alt='borrar'></a>
                   </td>                  
                 </tr>
             <?php    
@@ -57,7 +57,7 @@ class Panel{
             ?>            
           </tbody>
         </table>
-        <a href="<?=htmlspecialchars($_SERVER["PHP_SELF"]."?nuevoSabor")?>"><button class="btn align-content-lg-between btn-primary m-3" type="button">Nuevo sabor</button></a>
+        <a href="<?=htmlspecialchars($_SERVER["PHP_SELF"]."?action=6")?>"><button class="btn align-content-lg-between btn-primary m-3" type="button">Nuevo sabor</button></a>
       </div>       
     </main>
     <?php
