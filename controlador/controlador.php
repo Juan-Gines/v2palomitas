@@ -9,6 +9,6 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
   }elseif(isset($_POST["elige"])){
     $tabla->tablaIngredientes();
   }
-}else{  
-  $formIdiomas->form();
+}else{
+  ($_SESSION["id"])? $formSabores->form(): $formIdiomas->form();
 }

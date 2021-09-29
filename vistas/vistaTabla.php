@@ -84,7 +84,8 @@ class VistaTabla{
             <label for="ale" class="fw-bold"><?=$cabecera->alergenos()?></label>
             <p id="ale" class="ps-3"><?=$titulo->alergenos()?></p>
           </article>
-        </section>   
+        </section>
+        <a href="<?=$_SERVER["PHP_SELF"]?>"><button class="btn align-content-lg-between btn-primary m-3"><?=$cabecera->volver()?></button></a>   
     </main>
     <?php
     Pie::footer();

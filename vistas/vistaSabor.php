@@ -6,9 +6,9 @@ require_once "modelo/cabeceras.php";
 require_once "modelo/listaSabores.php";
 class VistaSabor{
   
-  static function formSabores($idioma,$saboresId,$cabecera,$listaSabores){
+  static function formSabores($saboresId,$cabecera,$listaSabores){
     
-    Cabecera::head($idioma);
+    Cabecera::head($_SESSION["id"]);
     ?>
       <main class=" flex-column">
         <form action="<?=htmlspecialchars($_SERVER["PHP_SELF"])?>" method="POST">
@@ -21,7 +21,7 @@ class VistaSabor{
             <?php
           }
       ?>            
-            <button class="btn align-content-lg-between btn-primary m-3" name="elige">Continuar</button>
+            <button class="btn align-content-lg-between btn-primary m-3" name="elige"><?=$cabecera->continuar()?></button>
           </form>
       </main>
       <?php

@@ -14,6 +14,8 @@ class Cabeceras{
   private $ingredientes;
   private $alergenos;
   private $selecciona;
+  private $continuar;
+  private $volver;
 
   function __construct($lista) {
     $this->producto=$lista[0];
@@ -30,6 +32,8 @@ class Cabeceras{
     $this->ingredientes=$lista[11];
     $this->alergenos=$lista[12];
     $this->selecciona=$lista[13];
+    $this->continuar=$lista[14];
+    $this->volver=$lista[15];
   }
 
   function producto(){
@@ -86,5 +90,13 @@ class Cabeceras{
 
   function selecciona(){
     return $this->selecciona;
+  }
+
+  function continuar(){
+    return $this->continuar;
+  }
+
+  function volver(){
+    return $this->volver;
   }
 }

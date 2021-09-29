@@ -10,21 +10,37 @@ if(!$_SESSION["login"]){
       $edit->idioma();
       break;
     case 2:
-
+      $delete->idioma();
       break;
     case 3:
       $new->idioma();
       break;
     case 4:
-
+      $edit->sabor();
       break;
     case 5:
-
+      $delete->sabor();
       break;
     case 6:
-
+      $new->sabor();
       break;
   }
+}elseif($_SERVER["REQUEST_METHOD"]=="POST"){
+  switch(true){
+    case isset($_POST["editaIdioma"]):
+      $edit->putIdioma();
+      break;
+    case isset($_POST["nuevoIdioma"]):
+      $new->postIdioma();
+      break;
+    case isset($_POST["editaSabor"]):
+      $edit->putIdioma();
+      break;
+    case isset($_POST["nuevoSabor"]):
+      $new->postIdioma();
+      break;
+  }
+
 }elseif($_SESSION["login"]){
   $panel->panel();
 }

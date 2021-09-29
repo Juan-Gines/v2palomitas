@@ -5,6 +5,7 @@ require_once "modelo/titulos.php";
 require_once "modelo/valores.php";
 require_once "modelo/saboresId.php";
 require_once "modelo/listaSabores.php";
+require_once "libreria/Contexto.php";
 class Servicios{
   private $cabeceras;
   private $titulos;
@@ -21,7 +22,7 @@ class Servicios{
     return $this->idiomas;
   }
 
-  function getListaSabores(){
+  function getListaSabores(){    
     $resultado=file_get_contents($this->url."?listasabores");
     $result=json_decode($resultado,true);
     $this->listaSabores=new ListaSabores($result);
@@ -42,9 +43,9 @@ class Servicios{
     return $this->cabeceras;
   }
 
-  function getTitulos(){
+  function getTitulos(){    
     $resultado=file_get_contents($this->url."?titulos&id=".$_SESSION["id"]."&sabor=".$_SESSION["sabor"]);
-    $result=json_decode($resultado,true);
+    $result=json_decode($resultado,true);    
     $this->titulos=new Titulos($result);
     return $this->titulos;
   }
@@ -58,6 +59,25 @@ class Servicios{
 
   function getUser(){
     $resultado=file_get_contents($this->url."?login&user=".$_SESSION["user"]."&pass=".$_SESSION["pass"]);
+    $result=json_decode($resultado,true);    
+    return $result;
+  }
+
+  function putIdioma($recupera){
+    $recupera["user"]=$_SESSION["user"];
+    $recupera["pass"]=$_SESSION["pass"];
+    $recupera["idVieja"]=$_SESSION["id"];    
+    $contexto=Contexto::contexto('put',$recupera);
+    $resultado=file_get_contents($this->url."?putIdioma",false,$contexto);    
+    $result=json_decode($resultado,true);    
+    return $result;
+  }
+
+  function postIdioma($recupera){    
+    $recupera["user"]=$_SESSION["user"];
+    $recupera["pass"]=$_SESSION["pass"];    
+    $contexto=Contexto::contexto('post',$recupera);
+    $resultado=file_get_contents($this->url."?idioma",false,$contexto);   
     $result=json_decode($resultado,true);    
     return $result;
   }

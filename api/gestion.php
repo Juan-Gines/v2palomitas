@@ -47,7 +47,7 @@ class Gestion
                     $saborid=explode(";\r\n", $saborid);
                     $saborid[count($saborid)-1]=trim($saborid[count($saborid)-1], ";");
                     $posArray=array_search("<".$_GET["id"].">", $saborid);
-                    $pos=strpos($saborid[$posArray+1], "-");
+                    $pos=strpos($saborid[$posArray+1], "=");
                     $result=substr($saborid[$posArray+1], $pos+1);
                     $resultado[]=$result;
                 }
@@ -122,7 +122,7 @@ class Gestion
                     $pos=strpos($saborid[$i], "=");
                     $titulos[]=substr($saborid[$i], $pos+1);
                 }
-                $listaJson=json_encode($titulos);
+                $listaJson=json_encode($titulos);								
                 return $listaJson;
             }
         }
@@ -147,8 +147,9 @@ class Gestion
         }
     }
 
+		//función que controla si estas logueado
     public static function getLogin(){
-      if (isset($_GET["user"])&&isset($_GET["pass"])){
+			if (isset($_GET["user"])&&isset($_GET["pass"])){
         $_GET["user"]=ValidarInputs::input_test($_GET["user"]);
         $_GET["pass"]=ValidarInputs::input_test($_GET["pass"]);
         $usuarios=file_get_contents("../data/usuarios/users.csv");
@@ -169,6 +170,124 @@ class Gestion
       $listaJson=json_encode($login);
       return $listaJson;
     }
+
+		//funcíon que modifica el idioma
+		public static function putIdioma(){			
+			$strJson=file_get_contents('php://input');
+			$data=json_decode($strJson,true);			
+			$_GET["user"]=$data["user"];
+			$_GET["pass"]=$data["pass"];
+			$paso=Gestion::getLogin();
+			$paso=json_decode($paso,true);
+			if ($paso["login"]) {
+				$idiomas=Gestion::getIdiomas();
+				$idiomas=json_decode($idiomas,true);
+				$sabores=Gestion::getListaSabores();
+				$sabores=json_decode($sabores,true);
+				$pos=array_search($data["idVieja"],$idiomas["id"]);
+				$idiomas["idiomas"][$pos]=$data["idioma"];
+				$idiomas["id"][$pos]=$data["codigo"];								
+				$string="";
+				for($i=0;$i<count($idiomas["id"]);$i++){
+					if($i==count($idiomas["id"])-1){
+						$string.=$idiomas["idiomas"][$i]."=".$idiomas["id"][$i].";";
+					}else{
+						$string.=$idiomas["idiomas"][$i]."=".$idiomas["id"][$i].";\r\n";
+					}
+				}				
+				file_put_contents('../data/idioma/lista.csv',$string);
+				$string="producto={$data["producto"]};\r\n".
+					"Valor energético  (kJ)={$data["valor1"]};\r\n".
+					"Valor energético  (Kcal)={$data["valor2"]});\r\n".
+					"Grasas (g)={$data["grasas1"]};\r\n".
+					"de las cuales:={$data["grasas2"]};\r\n".
+					"Saturadas  (g):={$data["grasas3"]};\r\n".
+					"Hidratos de carbono:={$data["hidratos1"]};\r\n".
+					"de los cuales:={$data["hidratos2"]};\r\n".
+					"Azúcares (g):={$data["hidratos3"]};\r\n".
+					"Proteinas (g):={$data["proteinas"]};\r\n".
+					"Sal (g): ={$data["sal"]};\r\n".
+					"Ingredientes={$data["ingredientes"]};\r\n".
+					"Alérgenos={$data["alergenos"]};\r\n".
+					"Seleccione el sabor={$data["selecciona"]};\r\n".
+					"Continuar={$data["continuar"]};\r\n".
+					"Volver={$data["volver"]};";
+				file_put_contents('../data/idioma/'.$data["codigo"].'.csv',$string);
+				
+				foreach($sabores as $sab){
+					$saborid=file_get_contents("../data/sabores/".$sab.".csv");
+					$saborid=explode(";\r\n", $saborid);
+					$saborid[count($saborid)-1]=trim($saborid[count($saborid)-1], ";");
+					$posArray=array_search("<".$data["idVieja"].">", $saborid);
+					$saborid[$posArray]="<".$data["codigo"].">";
+					$saborid[$posArray+1]="Título=".$data["tit".$sab];
+					$saborid[$posArray+2]="Ingredientes=".$data["ing".$sab];
+					$saborid[$posArray+3]="Alérgenos=".$data["ale".$sab];
+					$string=implode(";\r\n",$saborid);
+					$string=rtrim($string,"\r\n");					
+					file_put_contents('../data/sabores/'.$sab.'.csv',$string);					
+				}
+				$resultado=["result"=>true];
+				$listaJson=json_encode($resultado);
+				return $listaJson;				
+			}else{
+				$resultado=["result"=>false];
+				$listaJson=json_encode($resultado);
+				return $listaJson;
+			}			 
+		}
+		
+		public static function postIdioma(){
+				$strJson=file_get_contents('php://input');
+				$data=json_decode($strJson,true);			
+				$_GET["user"]=$data["user"];
+				$_GET["pass"]=$data["pass"];
+				$paso=Gestion::getLogin();
+				$paso=json_decode($paso,true);
+				if ($paso["login"]) {
+					$idiomas=Gestion::getIdiomas();
+					$idiomas=json_decode($idiomas);
+					$sabores=Gestion::getListaSabores();
+					$sabores=json_decode($sabores);
+					$enlace=fopen("../data/idioma/lista.csv", "a");
+					fwrite($enlace,"\r\n{$data["idioma"]}={$data["codigo"]};");
+					fclose($enlace);
+					$string="producto={$data["producto"]};\r\n".
+						"Valor energético  (kJ)={$data["valor1"]};\r\n".
+						"Valor energético  (Kcal)={$data["valor2"]});\r\n".
+						"Grasas (g)={$data["grasas1"]};\r\n".
+						"de las cuales:={$data["grasas2"]};\r\n".
+						"Saturadas  (g):={$data["grasas3"]};\r\n".
+						"Hidratos de carbono:={$data["hidratos1"]};\r\n".
+						"de los cuales:={$data["hidratos2"]};\r\n".
+						"Azúcares (g):={$data["hidratos3"]};\r\n".
+						"Proteinas (g):={$data["proteinas"]};\r\n".
+						"Sal (g): ={$data["sal"]};\r\n".
+						"Ingredientes={$data["ingredientes"]};\r\n".
+						"Alérgenos={$data["alergenos"]};\r\n".
+						"Seleccione el sabor={$data["selecciona"]};\r\n".
+						"Continuar={$data["continuar"]};\r\n".
+						"Volver={$data["volver"]};";
+					file_put_contents('../data/idioma/'.$data["codigo"].'.csv',$string);
+					$string="";
+					foreach($sabores as $sab){
+						$string="\r\n<".$data["codigo"].">;\r\n".
+							"Título=".$data["tit".$sab].";\r\n".
+							"Ingredientes=".$data["ing".$sab].";\r\n".
+							"Alérgenos=".$data["ale".$sab].";";					
+						$enlace=fopen('../data/sabores/'.$sab.'.csv', "a");
+						fwrite($enlace,$string);
+						fclose($enlace);					
+					}
+				$resultado=["result"=>true];
+				$listaJson=json_encode($resultado);
+				return $listaJson;				
+			}
+				$resultado=["result"=>false];
+				$listaJson=json_encode($resultado);
+				return $listaJson;			
+		}
 }
+
 
       

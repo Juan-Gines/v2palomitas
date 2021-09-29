@@ -9,13 +9,15 @@ class FormSabores{
     $this->consulta=new Servicios();
   }
   function form(){
-    $idiomas=$this->consulta->getIdiomas();
-    $id=ValidarInputs::input_test($_POST["lang"]);    
-    foreach ($idiomas->ids() as $ok) {
-      if ($ok==$id) {
-        $_SESSION["id"]=$id;
-        break;
-      }
+    if (!$_SESSION["id"]) {
+        $idiomas=$this->consulta->getIdiomas();
+        $id=ValidarInputs::input_test($_POST["lang"]);
+        foreach ($idiomas->ids() as $ok) {
+            if ($ok==$id) {
+                $_SESSION["id"]=$id;
+                break;
+            }
+        }
     }
     if(!$_SESSION["id"]){
       session_destroy();
@@ -25,7 +27,7 @@ class FormSabores{
       $sabor=$this->consulta->getSaborId();
       $cabeceras=$this->consulta->getCabeceras();
       $listaSabores=$this->consulta->getListaSabores();      
-      $form=VistaSabor::formSabores($_SESSION["id"],$sabor,$cabeceras,$listaSabores);
+      $form=VistaSabor::formSabores($sabor,$cabeceras,$listaSabores);
       return $form;
     }           
     
