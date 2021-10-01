@@ -68,7 +68,7 @@ class Servicios{
     $recupera["pass"]=$_SESSION["pass"];
     $recupera["idVieja"]=$_SESSION["id"];    
     $contexto=Contexto::contexto('put',$recupera);
-    $resultado=file_get_contents($this->url."?putIdioma",false,$contexto);    
+    $resultado=file_get_contents($this->url."?idioma",false,$contexto);    
     $result=json_decode($resultado,true);    
     return $result;
   }
@@ -78,6 +78,16 @@ class Servicios{
     $recupera["pass"]=$_SESSION["pass"];    
     $contexto=Contexto::contexto('post',$recupera);
     $resultado=file_get_contents($this->url."?idioma",false,$contexto);   
+    $result=json_decode($resultado,true);    
+    return $result;
+  }
+
+  function putSabor($recupera){
+    $recupera["user"]=$_SESSION["user"];
+    $recupera["pass"]=$_SESSION["pass"];
+    $recupera["saborViejo"]=$_SESSION["sabor"];    
+    $contexto=Contexto::contexto('put',$recupera);
+    $resultado=file_get_contents($this->url."?sabor",false,$contexto);    
     $result=json_decode($resultado,true);    
     return $result;
   }

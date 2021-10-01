@@ -20,8 +20,11 @@ switch($_SERVER["REQUEST_METHOD"]){
       $resultado=Gestion::getLogin();
     }
   case 'PUT':
-    if(isset($_GET["putIdioma"])){      
+    if(isset($_GET["idioma"])){      
       $resultado=Gestion::putIdioma();
+    }
+    if(isset($_GET["sabor"])){      
+      $resultado=Gestion::putSabor();
     }
   case 'POST':
     if(isset($_GET["idioma"])){      

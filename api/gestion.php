@@ -287,6 +287,72 @@ class Gestion
 				$listaJson=json_encode($resultado);
 				return $listaJson;			
 		}
+
+				//funcíon que modifica el sabor
+		public static function putSabor(){			
+			$strJson=file_get_contents('php://input');
+			$data=json_decode($strJson,true);			
+			$_GET["user"]=$data["user"];
+			$_GET["pass"]=$data["pass"];
+			$paso=Gestion::getLogin();
+			$paso=json_decode($paso,true);
+			if ($paso["login"]) {
+				$idiomas=Gestion::getIdiomas();
+				$idiomas=json_decode($idiomas,true);
+				$sabores=Gestion::getListaSabores();
+				$sabores=json_decode($sabores,true);
+				$pos=array_search($data["saborViejo"],$sabores);
+				$sabores[$pos]=$data["codigo"];												
+				$string="";
+				for($i=0;$i<count($sabores);$i++){
+					if($i==count($sabores)-1){
+						$string.=$sabores[$i].";";
+					}else{
+						$string.=$sabores[$i].";\r\n";
+					}
+				}				
+				file_put_contents('../data/idioma/listasab.csv',$string);
+				$string="producto={$data["producto"]};\r\n".
+					"Valor energético  (kJ)100={$data["valorkj1"]};\r\n".
+					"Valor energético  (kJ)32={$data["valorkj2"]});\r\n".
+					"Valor energético  (kcal)100={$data["valorkcal1"]};\r\n".
+					"Valor energético  (kcal)32={$data["valorkcal2"]});\r\n".
+					"Grasas (g)100={$data["grasas1"]};\r\n".
+					"Grasas (g)32={$data["grasas2"]};\r\n".
+					"Saturadas  (g)100={$data["saturadas1"]};\r\n".
+					"Saturadas  (g)32={$data["saturadas2"]};\r\n".
+					"Hidratos de carbono:100={$data["hidratos1"]};\r\n".
+					"Hidratos de carbono:32={$data["hidratos2"]};\r\n".					
+					"Azúcares (g):100={$data["azucares1"]};\r\n".
+					"Azúcares (g):32={$data["azucares2"]};\r\n".
+					"Proteinas (g):100={$data["proteinas1"]};\r\n".
+					"Proteinas (g):32={$data["proteinas2"]};\r\n".
+					"Sal (g):100 ={$data["sal1"]};\r\n".
+					"Sal (g):32 ={$data["sal2"]};";					
+				file_put_contents('../data/valores/val'.ucfirst($data["codigo"]).'.csv',$string);				
+				
+				$saborid=file_get_contents("../data/sabores/".$data["saborViejo"].".csv");
+				$saborid=explode(";\r\n", $saborid);
+				$saborid[count($saborid)-1]=trim($saborid[count($saborid)-1], ";");				
+				for ($i=0;$i<count($saborid);$i+4) {
+						$saborid[$i]="<".$idiomas["id"][$i].">";
+						$saborid[$i+1]="Título=".$data["tit".$idiomas["id"][$i]];
+						$saborid[$i+2]="Ingredientes=".$data["ing".$idiomas["id"][$i]];
+						$saborid[$i+3]="Alérgenos=".$data["ale".$idiomas["id"][$i]];
+				}
+				$string=implode(";\r\n",$saborid);
+				$string=rtrim($string,"\r\n");					
+				file_put_contents('../data/sabores/'.$data["codigo"].'.csv',$string);					
+				
+				$resultado=["result"=>true];
+				$listaJson=json_encode($resultado);
+				return $listaJson;				
+			}else{
+				$resultado=["result"=>false];
+				$listaJson=json_encode($resultado);
+				return $listaJson;
+			}			 
+		}
 }
 
 

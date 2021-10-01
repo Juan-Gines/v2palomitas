@@ -1,6 +1,7 @@
 <?php
 require_once "modelo/servicios/servicios.php";
 require_once "panel/vistas/editaIdioma.php";
+require_once "panel/vistas/editaSabor.php";
 require_once "libreria/ValidarInputs.php";
 class Editar
 {
@@ -39,8 +40,29 @@ class Editar
 
     public function sabor()
     {
-        $saboresId=$this->consulta->getSaborId();
+        if (isset($_GET["id"])&&is_numeric($_GET["id"])) {
+            $idio=$this->consulta->getIdiomas();
+						$idiomas=$idio->listado();
+						$ids=$idio->ids();
+						$saboresLista=$this->consulta->getListaSabores();						
+            if (key_exists($_GET["id"], $saboresLista->listado())) {						
+                $datos["sabor"]=$_SESSION["sabor"]=$saboresLista->listado()[$_GET["id"]];								
+                $datos["ids"]=$idio->ids();								
+                $datos["idiomas"]=$idio->listado();							
+                foreach ($idio->ids() as $id) {
+                    $_SESSION["id"]=$id;
+                    $datos["titulos"][]=$this->consulta->getTitulos();
+                }														
+                $datos["valores"]=$this->consulta->getValores();               
+            }
+						$_SESSION["editar"]=true;
+            EditaSabor::editaSabor($idiomas, $ids, $datos);
+        } else {
+            header("Location:{$_SERVER["PHP_SELF"]}");
+            exit;
+        }
     }
+
     public function putIdioma()
     {      
       $id=$_SESSION["id"];
@@ -96,6 +118,61 @@ class Editar
         EditaIdioma::editaIdioma($saborEsp,$saboresLista);
       }else{				
           EditaIdioma::editaIdioma($saborEsp, $saboresLista, [], $recupera);
+      }              
+    }
+
+		public function putSabor()
+    {      
+      $idiomas=$this->consulta->getIdiomas();
+      if ($_SESSION["idrand"]==$_POST["idrand"]) {                    
+          foreach ($_POST as $key => $value) {
+              $_POST[$key]=(!empty($value))? ValidarInputs::input_test($value):"";
+          }
+          !empty($_POST["codigo"])?$recupera["codigo"]=$_POST["codigo"]:$recupera["er_codigo"]="*Campo vacio";
+          !empty($_POST["titSabor"])?$recupera["titSabor"]=$_POST["titSabor"]:$recupera["er_titSabor"]="*Campo vacio";
+          foreach ($idiomas->ids() as $id) {
+              !empty($_POST["tit".$id])?$recupera["tit".$id]=$_POST["tit".$id]:$recupera["er_tit".$id]="*Campo vacio";
+              !empty($_POST["ing".$id])?$recupera["ing".$id]=$_POST["ing".$id]:$recupera["er_ing".$id]="*Campo vacio";
+              !empty($_POST["ale".$id])?$recupera["ale".$id]=$_POST["ale".$id]:$recupera["er_ale".$id]="*Campo vacio";
+          }
+          !empty($_POST["producto"])?$recupera["producto"]=$_POST["producto"]:$recupera["er_producto"]="*Campo vacio";
+          !empty($_POST["valorkj1"])?$recupera["valorkj1"]=$_POST["valorkj1"]:$recupera["er_valorkj1"]="*Campo vacio";
+          !empty($_POST["valorkj2"])?$recupera["valorkj2"]=$_POST["valorkj2"]:$recupera["er_valorkj2"]="*Campo vacio";
+          !empty($_POST["valorkcal1"])?$recupera["valorkcal1"]=$_POST["valorkcal1"]:$recupera["er_valorkcal1"]="*Campo vacio";
+          !empty($_POST["valorkcal2"])?$recupera["valorkcal2"]=$_POST["valorkcal2"]:$recupera["er_valorkcal2"]="*Campo vacio";
+          !empty($_POST["grasas1"])?$recupera["grasas1"]=$_POST["grasas1"]:$recupera["er_grasas1"]="*Campo vacio";
+          !empty($_POST["grasas2"])?$recupera["grasas2"]=$_POST["grasas2"]:$recupera["er_grasas2"]="*Campo vacio";
+          !empty($_POST["saturadas1"])?$recupera["saturadas1"]=$_POST["saturadas1"]:$recupera["er_saturadas1"]="*Campo vacio";
+          !empty($_POST["saturadas2"])?$recupera["saturadas2"]=$_POST["saturadas2"]:$recupera["er_saturadas2"]="*Campo vacio";
+          !empty($_POST["hidratos1"])?$recupera["hidratos1"]=$_POST["hidratos1"]:$recupera["er_hidratos1"]="*Campo vacio";
+          !empty($_POST["hidratos2"])?$recupera["hidratos2"]=$_POST["hidratos2"]:$recupera["er_hidratos2"]="*Campo vacio";
+          !empty($_POST["azucar1"])?$recupera["azucar1"]=$_POST["azucar1"]:$recupera["er_azucar1"]="*Campo vacio";
+          !empty($_POST["azucar2"])?$recupera["azucar2"]=$_POST["azucar2"]:$recupera["er_azucar2"]="*Campo vacio";
+          !empty($_POST["proteinas1"])?$recupera["proteinas1"]=$_POST["proteinas1"]:$recupera["er_proteinas1"]="*Campo vacio";
+          !empty($_POST["proteinas2"])?$recupera["proteinas2"]=$_POST["proteinas2"]:$recupera["er_proteinas2"]="*Campo vacio";
+          !empty($_POST["sal1"])?$recupera["sal1"]=$_POST["sal1"]:$recupera["er_sal1"]="*Campo vacio";
+          !empty($_POST["sal2"])?$recupera["sal2"]=$_POST["sal2"]:$recupera["er_sal2"]="*Campo vacio";          
+          $error=false;
+          foreach ($recupera as $key=>$valor) {
+              $key=substr($key,0, 3);
+              if ($key=="er_") {
+                  $error=true;
+                  break;
+              }
+          }
+          if (!$error) {
+              $resultado=$this->consulta->putSabor($recupera);
+              if($resultado["result"]){
+								$_SESSION["editar"]=false;
+                header("Location:".$_SERVER["PHP_SELF"]);
+                exit;
+              }
+          }
+      }
+      if(!isset($recupera)){
+        EditaIdioma::editaIdioma($idiomas->listado(),$idiomas->ids());
+      }else{				
+          EditaIdioma::editaIdioma($idiomas->listado(), $idiomas->ids(), [], $recupera);
       }              
     }
 }
