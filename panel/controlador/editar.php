@@ -165,8 +165,7 @@ class Editar
                   break;
               }
           }					
-          if (!$error) {
-						echo "entro aqui";
+          if (!$error) {						
               $resultado=$this->consulta->putSabor($recupera);
               if($resultado["result"]){
 								$_SESSION["editar"]=false;

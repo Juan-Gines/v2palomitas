@@ -36,6 +36,14 @@ switch($_SERVER["REQUEST_METHOD"]){
       $resultado=Gestion::postSabor();
     }
     break;
+  case 'DELETE':
+    if(isset($_GET["idioma"])){      
+      $resultado=Gestion::deleteIdioma();
+    }
+    if(isset($_GET["sabor"])){      
+      $resultado=Gestion::deleteSabor();
+    }
+    break;
 }
 if(!empty($resultado)){
   echo $resultado;

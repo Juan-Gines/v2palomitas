@@ -224,7 +224,7 @@ class Gestion
 					$saborid[$posArray+2]="Ingredientes=".$data["ing".$sab];
 					$saborid[$posArray+3]="Alérgenos=".$data["ale".$sab];
 					$string=implode(";\r\n",$saborid);
-					$string=rtrim($string,"\r\n");					
+					$string=rtrim($string,";\r\n").";";					
 					file_put_contents('../data/sabores/'.$sab.'.csv',$string);					
 				}
 				$resultado=["result"=>true];
@@ -246,7 +246,7 @@ class Gestion
 				$paso=json_decode($paso,true);
 				if ($paso["login"]) {
 					$idiomas=Gestion::getIdiomas();
-					$idiomas=json_decode($idiomas);
+					$idiomas=json_decode($idiomas,true);
 					$sabores=Gestion::getListaSabores();
 					$sabores=json_decode($sabores,true);
 					$enlace=fopen("../data/idioma/lista.csv", "a");
@@ -311,7 +311,7 @@ class Gestion
 						$string.=$sabores[$i].";\r\n";
 					}
 				}				
-				file_put_contents('../data/idioma/listasab.csv',$string);
+				file_put_contents('../data/sabores/listasab.csv',$string);
 				$string="producto={$data["producto"]};\r\n".
 					"Valor energético  (kJ)100={$data["valorkj1"]};\r\n".
 					"Valor energético  (kJ)32={$data["valorkj2"]};\r\n".
@@ -343,7 +343,7 @@ class Gestion
 						$j++;
 				}
 				$string=implode(";\r\n",$saborid);
-				$string=rtrim($string,"\r\n").";";					
+				$string=rtrim($string,";\r\n").";";					
 				file_put_contents('../data/sabores/'.$data["codigo"].'.csv',$string);					
 				
 				$resultado=["result"=>true];
@@ -400,7 +400,7 @@ class Gestion
 						$j++;
 				}
 				$string=implode(";\r\n",$saborid);
-				$string=rtrim($string,"\r\n").";";					
+				$string=rtrim($string,";\r\n").";";					
 				file_put_contents('../data/sabores/'.$data["codigo"].'.csv',$string);
 					
 				$resultado=["result"=>true];
@@ -410,6 +410,86 @@ class Gestion
 				$resultado=["result"=>false];
 				$listaJson=json_encode($resultado);
 				return $listaJson;			
+		}
+
+		public static function deleteIdioma(){
+			if (isset($_GET["user"])&&isset($_GET["pass"])&&isset($_GET["idioma"])) {
+				$_GET["user"]=ValidarInputs::input_test($_GET["user"]);
+				$_GET["pass"]=ValidarInputs::input_test($_GET["pass"]);
+				$id=ValidarInputs::input_test($_GET["idioma"]);
+				$paso=Gestion::getLogin();
+				$paso=json_decode($paso,true);
+				if ($paso["login"]) {
+					unlink("../data/idioma/{$id}.csv");
+
+					$idiomas=Gestion::getIdiomas();
+					$idiomas=json_decode($idiomas,true);
+					$sabores=Gestion::getListaSabores();
+					$sabores=json_decode($sabores,true);
+					$pos=array_search($id,$idiomas["id"]);
+					unset($idiomas["idiomas"][$pos]);
+					unset($idiomas["id"][$pos]);														
+					$string="";
+					foreach($idiomas["idiomas"] as $key=>$idioma){								
+						$string.=$idioma."=".$idiomas["id"][$key].";\r\n";
+					}							
+					$string=rtrim($string,";\r\n").";";
+					file_put_contents("../data/idioma/lista.csv",$string);
+
+					foreach($sabores as $sab){
+						$saborid=file_get_contents("../data/sabores/".$sab.".csv");
+						$saborid=explode(";\r\n", $saborid);
+						$saborid[count($saborid)-1]=trim($saborid[count($saborid)-1], ";");
+						$posArray=array_search("<".$id.">", $saborid);
+						unset($saborid[$posArray]);
+						unset($saborid[$posArray+1]);
+						unset($saborid[$posArray+2]);
+						unset($saborid[$posArray+3]);
+						$string=implode(";\r\n",$saborid);
+						$string=rtrim($string,";\r\n").";";					
+						file_put_contents('../data/sabores/'.$sab.'.csv',$string);					
+					}
+					$resultado=["result"=>true];
+					$listaJson=json_encode($resultado);
+					return $listaJson;				
+				}else{
+					$resultado=["result"=>false];
+					$listaJson=json_encode($resultado);
+					return $listaJson;
+				}			
+			}
+		}
+		
+
+		public static function deleteSabor(){
+			if (isset($_GET["user"])&&isset($_GET["pass"])&&isset($_GET["sabor"])) {
+				$_GET["user"]=ValidarInputs::input_test($_GET["user"]);
+				$_GET["pass"]=ValidarInputs::input_test($_GET["pass"]);
+				$sabor=ValidarInputs::input_test($_GET["sabor"]);
+				$paso=Gestion::getLogin();
+				$paso=json_decode($paso,true);
+				if ($paso["login"]) {
+					unlink("../data/sabores/{$sabor}.csv");
+					unlink("../data/valores/val".ucfirst($sabor).".csv");
+					
+					$sabores=Gestion::getListaSabores();
+					$sabores=json_decode($sabores,true);
+
+					$pos=array_search($sabor,$sabores);
+					unset($sabores[$pos]);
+					$string=implode(";\r\n",$sabores);
+					$string=rtrim($string,";\r\n").";";					
+					file_put_contents('../data/sabores/listasab.csv',$string);
+
+					$resultado=["result"=>true];
+					$listaJson=json_encode($resultado);
+					return $listaJson;
+				}else{
+					$resultado=["result"=>false];
+					$listaJson=json_encode($resultado);
+					return $listaJson;
+				}
+			}
 		}
 }
 

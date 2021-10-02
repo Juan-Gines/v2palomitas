@@ -120,8 +120,7 @@ class Nuevo{
               }
           }					
           if (!$error) {						
-              $resultado=$this->consulta->postSabor($recupera);
-              var_dump($resultado);
+              $resultado=$this->consulta->postSabor($recupera);              
               if($resultado["result"]){
 								$_SESSION["editar"]=false;
                 header("Location:".$_SERVER["PHP_SELF"]);

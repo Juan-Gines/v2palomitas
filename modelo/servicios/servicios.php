@@ -87,18 +87,30 @@ class Servicios{
     $recupera["pass"]=$_SESSION["pass"];
     $recupera["saborViejo"]=$_SESSION["sabor"];        
     $contexto=Contexto::contexto('put',$recupera);
-    $resultado=file_get_contents($this->url."?sabor",false,$contexto);       
+    $resultado=file_get_contents($this->url."?sabor",false,$contexto);           
     $result=json_decode($resultado,true);    
     return $result;
   }
 
   function postSabor($recupera){    
     $recupera["user"]=$_SESSION["user"];
-    $recupera["pass"]=$_SESSION["pass"]; 
-    var_dump($recupera);   
+    $recupera["pass"]=$_SESSION["pass"];      
     $contexto=Contexto::contexto('post',$recupera);
-    $resultado=file_get_contents($this->url."?sabor",false,$contexto); 
-    echo $resultado;   
+    $resultado=file_get_contents($this->url."?sabor",false,$contexto);      
+    $result=json_decode($resultado,true);    
+    return $result;
+  }
+
+  function borraIdioma(){    
+    $contexto=Contexto::contexto('delete');
+    $resultado=file_get_contents($this->url."?idioma=".$_SESSION["id"]."&user=".$_SESSION["user"]."&pass=".$_SESSION["pass"],false,$contexto);         
+    $result=json_decode($resultado,true);    
+    return $result;
+  }
+
+  function borraSabor(){          
+    $contexto=Contexto::contexto('delete');
+    $resultado=file_get_contents($this->url."?sabor=".$_SESSION["sabor"]."&user=".$_SESSION["user"]."&pass=".$_SESSION["pass"],false,$contexto);          
     $result=json_decode($resultado,true);    
     return $result;
   }
