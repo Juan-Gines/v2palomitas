@@ -34,10 +34,11 @@ if(!$_SESSION["login"]){
       $new->postIdioma();
       break;
     case isset($_POST["editaSabor"]):
-      $edit->putIdioma();
+      echo "entro aqui";
+      $edit->putSabor();
       break;
     case isset($_POST["nuevoSabor"]):
-      $new->postIdioma();
+      $new->postSabor();
       break;
   }
 

@@ -1,5 +1,9 @@
 <?php
 require_once "modelo/servicios/servicios.php";
+require_once "modelo/idiomas.php";
+require_once "modelo/listaSabores.php";
+require_once "modelo/titulos.php";
+require_once "modelo/valores.php";
 require_once "panel/vistas/editaIdioma.php";
 require_once "panel/vistas/editaSabor.php";
 require_once "libreria/ValidarInputs.php";
@@ -44,18 +48,19 @@ class Editar
             $idio=$this->consulta->getIdiomas();
 						$idiomas=$idio->listado();
 						$ids=$idio->ids();
+						$_SESSION["id"]="es";
 						$saboresLista=$this->consulta->getListaSabores();						
             if (key_exists($_GET["id"], $saboresLista->listado())) {						
                 $datos["sabor"]=$_SESSION["sabor"]=$saboresLista->listado()[$_GET["id"]];								
                 $datos["ids"]=$idio->ids();								
                 $datos["idiomas"]=$idio->listado();							
                 foreach ($idio->ids() as $id) {
-                    $_SESSION["id"]=$id;
+                    $_SESSION["id"]=$id;										
                     $datos["titulos"][]=$this->consulta->getTitulos();
                 }														
                 $datos["valores"]=$this->consulta->getValores();               
             }
-						$_SESSION["editar"]=true;
+						$_SESSION["editar"]=true;						
             EditaSabor::editaSabor($idiomas, $ids, $datos);
         } else {
             header("Location:{$_SERVER["PHP_SELF"]}");
@@ -122,9 +127,9 @@ class Editar
     }
 
 		public function putSabor()
-    {      
+    {			      
       $idiomas=$this->consulta->getIdiomas();
-      if ($_SESSION["idrand"]==$_POST["idrand"]) {                    
+      if ($_SESSION["idrand"]==$_POST["idrand"]) {				                   
           foreach ($_POST as $key => $value) {
               $_POST[$key]=(!empty($value))? ValidarInputs::input_test($value):"";
           }
@@ -148,8 +153,8 @@ class Editar
           !empty($_POST["hidratos2"])?$recupera["hidratos2"]=$_POST["hidratos2"]:$recupera["er_hidratos2"]="*Campo vacio";
           !empty($_POST["azucar1"])?$recupera["azucar1"]=$_POST["azucar1"]:$recupera["er_azucar1"]="*Campo vacio";
           !empty($_POST["azucar2"])?$recupera["azucar2"]=$_POST["azucar2"]:$recupera["er_azucar2"]="*Campo vacio";
-          !empty($_POST["proteinas1"])?$recupera["proteinas1"]=$_POST["proteinas1"]:$recupera["er_proteinas1"]="*Campo vacio";
-          !empty($_POST["proteinas2"])?$recupera["proteinas2"]=$_POST["proteinas2"]:$recupera["er_proteinas2"]="*Campo vacio";
+          !empty($_POST["proteina1"])?$recupera["proteina1"]=$_POST["proteina1"]:$recupera["er_proteina1"]="*Campo vacio";
+          !empty($_POST["proteina2"])?$recupera["proteina2"]=$_POST["proteina2"]:$recupera["er_proteina2"]="*Campo vacio";
           !empty($_POST["sal1"])?$recupera["sal1"]=$_POST["sal1"]:$recupera["er_sal1"]="*Campo vacio";
           !empty($_POST["sal2"])?$recupera["sal2"]=$_POST["sal2"]:$recupera["er_sal2"]="*Campo vacio";          
           $error=false;
@@ -159,8 +164,9 @@ class Editar
                   $error=true;
                   break;
               }
-          }
+          }					
           if (!$error) {
+						echo "entro aqui";
               $resultado=$this->consulta->putSabor($recupera);
               if($resultado["result"]){
 								$_SESSION["editar"]=false;
@@ -170,9 +176,9 @@ class Editar
           }
       }
       if(!isset($recupera)){
-        EditaIdioma::editaIdioma($idiomas->listado(),$idiomas->ids());
+        EditaSabor::editaSabor($idiomas->listado(),$idiomas->ids());
       }else{				
-          EditaIdioma::editaIdioma($idiomas->listado(), $idiomas->ids(), [], $recupera);
+          EditaSabor::editaSabor($idiomas->listado(), $idiomas->ids(), [], $recupera);
       }              
     }
 }

@@ -43,9 +43,9 @@ class Servicios{
     return $this->cabeceras;
   }
 
-  function getTitulos(){    
-    $resultado=file_get_contents($this->url."?titulos&id=".$_SESSION["id"]."&sabor=".$_SESSION["sabor"]);
-    $result=json_decode($resultado,true);    
+  function getTitulos(){        
+    $resultado=file_get_contents($this->url."?titulos&id=".$_SESSION["id"]."&sabor=".$_SESSION["sabor"]);    
+    $result=json_decode($resultado,true);        
     $this->titulos=new Titulos($result);
     return $this->titulos;
   }
@@ -85,9 +85,20 @@ class Servicios{
   function putSabor($recupera){
     $recupera["user"]=$_SESSION["user"];
     $recupera["pass"]=$_SESSION["pass"];
-    $recupera["saborViejo"]=$_SESSION["sabor"];    
+    $recupera["saborViejo"]=$_SESSION["sabor"];        
     $contexto=Contexto::contexto('put',$recupera);
-    $resultado=file_get_contents($this->url."?sabor",false,$contexto);    
+    $resultado=file_get_contents($this->url."?sabor",false,$contexto);       
+    $result=json_decode($resultado,true);    
+    return $result;
+  }
+
+  function postSabor($recupera){    
+    $recupera["user"]=$_SESSION["user"];
+    $recupera["pass"]=$_SESSION["pass"]; 
+    var_dump($recupera);   
+    $contexto=Contexto::contexto('post',$recupera);
+    $resultado=file_get_contents($this->url."?sabor",false,$contexto); 
+    echo $resultado;   
     $result=json_decode($resultado,true);    
     return $result;
   }

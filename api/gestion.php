@@ -110,10 +110,10 @@ class Gestion
     //necesita el tag del idioma y el nombre del sabor, devuelve la lista titulos
     public static function getTitulos()
     {
-        if (isset($_GET["id"])&&isset($_GET["sabor"])) {
+        if (isset($_GET["id"])&&isset($_GET["sabor"])) {				
             $_GET["id"]=ValidarInputs::input_test($_GET["id"]);
             $_GET["sabor"]=ValidarInputs::input_test($_GET["sabor"]);
-            if (self::validar($_GET["id"])&&self::validar("", $_GET["sabor"])) {
+            if (self::validar($_GET["id"])&&self::validar("", $_GET["sabor"])) {								
                 $saborid=file_get_contents("../data/sabores/".$_GET["sabor"].".csv");
                 $saborid=explode(";\r\n", $saborid);
                 $saborid[count($saborid)-1]=trim($saborid[count($saborid)-1], ";");
@@ -121,7 +121,7 @@ class Gestion
                 for ($i=$posArray+1;$i<$posArray+4;$i++) {
                     $pos=strpos($saborid[$i], "=");
                     $titulos[]=substr($saborid[$i], $pos+1);
-                }
+                }								
                 $listaJson=json_encode($titulos);								
                 return $listaJson;
             }
@@ -198,7 +198,7 @@ class Gestion
 				file_put_contents('../data/idioma/lista.csv',$string);
 				$string="producto={$data["producto"]};\r\n".
 					"Valor energético  (kJ)={$data["valor1"]};\r\n".
-					"Valor energético  (Kcal)={$data["valor2"]});\r\n".
+					"Valor energético  (Kcal)={$data["valor2"]};\r\n".
 					"Grasas (g)={$data["grasas1"]};\r\n".
 					"de las cuales:={$data["grasas2"]};\r\n".
 					"Saturadas  (g):={$data["grasas3"]};\r\n".
@@ -248,7 +248,7 @@ class Gestion
 					$idiomas=Gestion::getIdiomas();
 					$idiomas=json_decode($idiomas);
 					$sabores=Gestion::getListaSabores();
-					$sabores=json_decode($sabores);
+					$sabores=json_decode($sabores,true);
 					$enlace=fopen("../data/idioma/lista.csv", "a");
 					fwrite($enlace,"\r\n{$data["idioma"]}={$data["codigo"]};");
 					fclose($enlace);
@@ -314,34 +314,36 @@ class Gestion
 				file_put_contents('../data/idioma/listasab.csv',$string);
 				$string="producto={$data["producto"]};\r\n".
 					"Valor energético  (kJ)100={$data["valorkj1"]};\r\n".
-					"Valor energético  (kJ)32={$data["valorkj2"]});\r\n".
+					"Valor energético  (kJ)32={$data["valorkj2"]};\r\n".
 					"Valor energético  (kcal)100={$data["valorkcal1"]};\r\n".
-					"Valor energético  (kcal)32={$data["valorkcal2"]});\r\n".
+					"Valor energético  (kcal)32={$data["valorkcal2"]};\r\n".
 					"Grasas (g)100={$data["grasas1"]};\r\n".
 					"Grasas (g)32={$data["grasas2"]};\r\n".
 					"Saturadas  (g)100={$data["saturadas1"]};\r\n".
 					"Saturadas  (g)32={$data["saturadas2"]};\r\n".
 					"Hidratos de carbono:100={$data["hidratos1"]};\r\n".
 					"Hidratos de carbono:32={$data["hidratos2"]};\r\n".					
-					"Azúcares (g):100={$data["azucares1"]};\r\n".
-					"Azúcares (g):32={$data["azucares2"]};\r\n".
-					"Proteinas (g):100={$data["proteinas1"]};\r\n".
-					"Proteinas (g):32={$data["proteinas2"]};\r\n".
+					"Azúcares (g):100={$data["azucar1"]};\r\n".
+					"Azúcares (g):32={$data["azucar2"]};\r\n".
+					"Proteinas (g):100={$data["proteina1"]};\r\n".
+					"Proteinas (g):32={$data["proteina2"]};\r\n".
 					"Sal (g):100 ={$data["sal1"]};\r\n".
 					"Sal (g):32 ={$data["sal2"]};";					
 				file_put_contents('../data/valores/val'.ucfirst($data["codigo"]).'.csv',$string);				
 				
 				$saborid=file_get_contents("../data/sabores/".$data["saborViejo"].".csv");
 				$saborid=explode(";\r\n", $saborid);
-				$saborid[count($saborid)-1]=trim($saborid[count($saborid)-1], ";");				
-				for ($i=0;$i<count($saborid);$i+4) {
-						$saborid[$i]="<".$idiomas["id"][$i].">";
-						$saborid[$i+1]="Título=".$data["tit".$idiomas["id"][$i]];
-						$saborid[$i+2]="Ingredientes=".$data["ing".$idiomas["id"][$i]];
-						$saborid[$i+3]="Alérgenos=".$data["ale".$idiomas["id"][$i]];
+				$saborid[count($saborid)-1]=trim($saborid[count($saborid)-1], ";");	
+				$j=0;				
+				for ($i=0;$i<count($saborid);$i+=4) {
+						$saborid[$i]="<".$idiomas["id"][$j].">";
+						$saborid[$i+1]="Título=".$data["tit".$idiomas["id"][$j]];
+						$saborid[$i+2]="Ingredientes=".$data["ing".$idiomas["id"][$j]];
+						$saborid[$i+3]="Alérgenos=".$data["ale".$idiomas["id"][$j]];
+						$j++;
 				}
 				$string=implode(";\r\n",$saborid);
-				$string=rtrim($string,"\r\n");					
+				$string=rtrim($string,"\r\n").";";					
 				file_put_contents('../data/sabores/'.$data["codigo"].'.csv',$string);					
 				
 				$resultado=["result"=>true];
@@ -352,6 +354,62 @@ class Gestion
 				$listaJson=json_encode($resultado);
 				return $listaJson;
 			}			 
+		}
+
+			//funcion que crea un nuevo sabor
+		public static function postSabor(){
+				$strJson=file_get_contents('php://input');
+				$data=json_decode($strJson,true);			
+				$_GET["user"]=$data["user"];
+				$_GET["pass"]=$data["pass"];
+				$paso=Gestion::getLogin();
+				$paso=json_decode($paso,true);
+				if ($paso["login"]) {
+					$idiomas=Gestion::getIdiomas();
+					$idiomas=json_decode($idiomas,true);
+					$sabores=Gestion::getListaSabores();
+					$sabores=json_decode($sabores,true);
+					$enlace=fopen("../data/sabores/listasab.csv", "a");
+					fwrite($enlace,"\r\n{$data["codigo"]};");
+					fclose($enlace);
+					$string="producto={$data["producto"]};\r\n".
+					"Valor energético  (kJ)100={$data["valorkj1"]};\r\n".
+					"Valor energético  (kJ)32={$data["valorkj2"]};\r\n".
+					"Valor energético  (kcal)100={$data["valorkcal1"]};\r\n".
+					"Valor energético  (kcal)32={$data["valorkcal2"]};\r\n".
+					"Grasas (g)100={$data["grasas1"]};\r\n".
+					"Grasas (g)32={$data["grasas2"]};\r\n".
+					"Saturadas  (g)100={$data["saturadas1"]};\r\n".
+					"Saturadas  (g)32={$data["saturadas2"]};\r\n".
+					"Hidratos de carbono:100={$data["hidratos1"]};\r\n".
+					"Hidratos de carbono:32={$data["hidratos2"]};\r\n".					
+					"Azúcares (g):100={$data["azucar1"]};\r\n".
+					"Azúcares (g):32={$data["azucar2"]};\r\n".
+					"Proteinas (g):100={$data["proteina1"]};\r\n".
+					"Proteinas (g):32={$data["proteina2"]};\r\n".
+					"Sal (g):100 ={$data["sal1"]};\r\n".
+					"Sal (g):32 ={$data["sal2"]};";					
+					file_put_contents('../data/valores/val'.ucfirst($data["codigo"]).'.csv',$string);
+
+					$j=0;				
+				for ($i=0;$i<count($idiomas["id"])*4;$i+=4) {
+						$saborid[$i]="<".$idiomas["id"][$j].">";
+						$saborid[$i+1]="Título=".$data["tit".$idiomas["id"][$j]];
+						$saborid[$i+2]="Ingredientes=".$data["ing".$idiomas["id"][$j]];
+						$saborid[$i+3]="Alérgenos=".$data["ale".$idiomas["id"][$j]];
+						$j++;
+				}
+				$string=implode(";\r\n",$saborid);
+				$string=rtrim($string,"\r\n").";";					
+				file_put_contents('../data/sabores/'.$data["codigo"].'.csv',$string);
+					
+				$resultado=["result"=>true];
+				$listaJson=json_encode($resultado);
+				return $listaJson;				
+			}
+				$resultado=["result"=>false];
+				$listaJson=json_encode($resultado);
+				return $listaJson;			
 		}
 }
 

@@ -9,11 +9,7 @@ class EditaSabor{
     if(!empty($datos)){
       $titulos=$datos["titulos"];      
       $valores=$datos["valores"];      
-    }
-    echo"<pre>"; 
-    var_dump($datos);
-    var_dump($ids);
-    echo "</pre>";    
+    }        
     ?>
       <main class=" flex-column">
         <form action="<?=htmlspecialchars($_SERVER["PHP_SELF"])?>" method="POST">
@@ -75,11 +71,11 @@ class EditaSabor{
             <?php
             if ($_SESSION["editar"]) {
             ?>
-              <button class="btn align-content-lg-between btn-primary m-3" name="editaIdioma">Edita</button>
+              <button class="btn align-content-lg-between btn-primary m-3" name="editaSabor">Edita</button>
             <?php
             }else{
             ?>
-              <button class="btn align-content-lg-between btn-primary m-3" name="nuevoIdioma">Nuevo idioma</button>
+              <button class="btn align-content-lg-between btn-primary m-3" name="nuevoSabor">Nuevo SABOR</button>
             <?php
             }
             ?>
